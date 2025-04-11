@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - MediReminder</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-[#E3F2FD]">
+    <div class="flex flex-col md:flex-row h-screen">
+        <!-- Mobile Header (visible on small screens) -->
+        <div class="md:hidden bg-white p-4 flex items-center justify-between shadow-sm">
+            <h2 class="text-xl font-bold text-blue-600">MeditAi</h2>
+            <button id="mobileMenuBtn" class="text-gray-600 hover:text-blue-600">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Sidebar (hidden on mobile by default) -->
+        <div id="sidebar" class="hidden md:block w-full md:w-64 bg-white shadow-lg md:h-screen overflow-y-auto transition-all duration-300 ease-in-out">
+            <div class="p-4">
+                <h2 class="text-2xl font-bold text-blue-600 mb-8">MeditAi</h2>
+                <nav class="space-y-2">
+                    <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-2.5 bg-blue-50 text-blue-600 rounded-lg">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="profile.html" class="flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="reminder.html" class="flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        <i class="fas fa-bell"></i>
+                        <span>Reminders</span>
+                    </a>
+                    <a href="doctors.html" class="flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        <i class="fas fa-user-md"></i>
+                        <span>Doctors</span>
+                    </a>
+                    <a href="chatbot.html" class="flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Assistant</span>
+                    </a>
+                    <a href="scan.html" class="flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg">
+                        <i class="fas fa-camera"></i>
+                        <span>Medicine Scanner</span>
+                    </a>
+                </nav>
+            </div>
+            <!-- User Profile -->
+            <div class="md:absolute md:bottom-0 w-full md:w-64 p-4 border-t">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium" id="userNameDisplay">User Name</h3>
+                        <button onclick="logout()" class="text-sm text-red-500 hover:text-red-600">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <!-- Top Bar -->
+            <div class="bg-white p-4 shadow-sm">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
+                    <h1 class="text-xl md:text-2xl font-semibold">Dashboard</h1>
+                    <div class="w-full sm:w-auto">
+                        <button id="notificationToggle" class="w-full sm:w-auto flex items-center justify-center space-x-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg">
+                            <i class="fas fa-volume-up"></i>
+                            <span class="hidden sm:inline">Voice Notifications: ON</span>
+                            <span class="sm:hidden">Voice: ON</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <!-- Upcoming Medications -->
+                <div class="col-span-1 md:col-span-2 bg-white rounded-xl shadow-sm p-4 md:p-6">
+                    <h2 class="text-xl font-semibold mb-4">Upcoming Medications</h2>
+                    <div class="space-y-4" id="medicationList">
+                        <!-- Medication items will be dynamically added here -->
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <i class="fas fa-pills text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">Example Medication</h3>
+                                    <p class="text-sm text-gray-500">2 pills, twice daily</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-medium">Next Dose</p>
+                                <p class="text-sm text-gray-500">In 2 hours</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="window.location.href='reminder.html'" class="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        Add New Medication
+                    </button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-xl shadow-sm p-4 md:p-6">
+                    <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+                    <div class="space-y-3">
+                        <button onclick="window.location.href='doctors.html'" class="w-full p-3 text-left bg-gray-50 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-user-md text-blue-600 mr-2"></i>
+                            Find a Doctor
+                        </button>
+                        <button onclick="window.location.href='scan.html'" class="w-full p-3 text-left bg-gray-50 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-camera text-blue-600 mr-2"></i>
+                            Scan Medicine
+                        </button>
+                        <button onclick="window.location.href='chatbot.html'" class="w-full p-3 text-left bg-gray-50 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-robot text-blue-600 mr-2"></i>
+                            Ask AI Assistant
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Health Tips -->
+                <div class="col-span-1 md:col-span-2 lg:col-span-3 bg-white rounded-xl shadow-sm p-4 md:p-6">
+                    <h2 class="text-xl font-semibold mb-4">Daily Health Tips</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <i class="fas fa-heart text-green-600 mb-2"></i>
+                            <h3 class="font-medium mb-2">Stay Active</h3>
+                            <p class="text-sm text-gray-600">Try to get at least 30 minutes of moderate exercise daily.</p>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <i class="fas fa-glass-water text-blue-600 mb-2"></i>
+                            <h3 class="font-medium mb-2">Stay Hydrated</h3>
+                            <p class="text-sm text-gray-600">Drink 8 glasses of water throughout the day.</p>
+                        </div>
+                        <div class="p-4 bg-purple-50 rounded-lg">
+                            <i class="fas fa-moon text-purple-600 mb-2"></i>
+                            <h3 class="font-medium mb-2">Quality Sleep</h3>
+                            <p class="text-sm text-gray-600">Aim for 7-9 hours of sleep each night.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in and initialize mobile menu
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const sidebar = document.getElementById('sidebar');
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+            });
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth < 768) { // md breakpoint
+                    if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                        sidebar.classList.add('hidden');
+                    }
+                }
+            });
+
+            // Ensure sidebar is visible when screen size changes to desktop
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) {
+                    sidebar.classList.remove('hidden');
+                }
+            });
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Display username
+            document.getElementById('userNameDisplay').textContent = currentUser.username;
+
+            // Handle voice notification toggle
+            const notificationToggle = document.getElementById('notificationToggle');
+            let voiceEnabled = localStorage.getItem('voiceNotifications') !== 'false';
+
+            updateNotificationButton();
+
+            notificationToggle.addEventListener('click', () => {
+                voiceEnabled = !voiceEnabled;
+                localStorage.setItem('voiceNotifications', voiceEnabled);
+                updateNotificationButton();
+            });
+
+            function updateNotificationButton() {
+                const icon = voiceEnabled ? 'fa-volume-up' : 'fa-volume-mute';
+                const desktopText = `Voice Notifications: ${voiceEnabled ? 'ON' : 'OFF'}`;
+                const mobileText = `Voice: ${voiceEnabled ? 'ON' : 'OFF'}`;
+                notificationToggle.innerHTML = `
+                    <i class="fas ${icon}"></i>
+                    <span class="hidden sm:inline">${desktopText}</span>
+                    <span class="sm:hidden">${mobileText}</span>
+                `;
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
